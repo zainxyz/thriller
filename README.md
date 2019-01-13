@@ -1,2 +1,3 @@
-# thriller
-An online movie and game rental service
+# Thriller
+
+An online movie and game rental service.

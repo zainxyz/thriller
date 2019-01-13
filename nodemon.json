@@ -1,0 +1,5 @@
+{
+    "events": {
+        "start": "node ./middlewares/nodemon-date.js"
+    }
+}
