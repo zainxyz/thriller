@@ -1,8 +1,8 @@
 import express from 'express';
 
-import Genre, { validateGenre } from '../models/genre';
-import adminMiddleware from '../middlewares/admin';
-import authMiddleware from '../middlewares/auth';
+import Genre, { validateGenre } from 'server/models/genre';
+import adminMiddleware from 'server/middlewares/admin';
+import authMiddleware from 'server/middlewares/auth';
 
 // Create a Router
 const router = express.Router();

@@ -1,9 +1,9 @@
 import express from 'express';
 
-import Genre from '../models/genre';
-import Movie, { validateMovie } from '../models/movie';
-import adminMiddleware from '../middlewares/admin';
-import authMiddleware from '../middlewares/auth';
+import Genre from 'server/models/genre';
+import Movie, { validateMovie } from 'server/models/movie';
+import adminMiddleware from 'server/middlewares/admin';
+import authMiddleware from 'server/middlewares/auth';
 
 // Create a Router
 const router = express.Router();

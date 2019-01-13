@@ -2,10 +2,10 @@ import Fawn from 'fawn';
 import express from 'express';
 import mongoose from 'mongoose';
 
-import Customer from '../models/customer';
-import Movie from '../models/movie';
-import Rental, { validateRental } from '../models/rental';
-import authMiddleware from '../middlewares/auth';
+import Customer from 'server/models/customer';
+import Movie from 'server/models/movie';
+import Rental, { validateRental } from 'server/models/rental';
+import authMiddleware from 'server/middlewares/auth';
 
 // Create a Router
 const router = express.Router();

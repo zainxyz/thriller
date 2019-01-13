@@ -3,7 +3,7 @@ import PasswordComplexity from 'joi-password-complexity';
 import bcrypt from 'bcrypt';
 import express from 'express';
 
-import User from '../models/user';
+import User from 'server/models/user';
 
 // Create a Router
 const router = express.Router();

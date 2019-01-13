@@ -1,11 +1,11 @@
 import express from 'express';
 import winston from 'winston';
 
-import buildRoutes from './startup/routes';
-import configureApp from './startup/config';
-import connectToDB from './startup/db';
-import logger from './startup/logger';
-import validation from './startup/validation';
+import buildRoutes from 'server/startup/routes';
+import configureApp from 'server/startup/config';
+import connectToDB from 'server/startup/db';
+import logger from 'server/startup/logger';
+import validation from 'server/startup/validation';
 
 // Log the error messages.
 logger();

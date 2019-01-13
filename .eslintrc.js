@@ -106,7 +106,7 @@ module.exports = {
     settings: {
         'import/resolver': {
             node: {
-                moduleDirectory: ['client', 'server', 'node_modules']
+                moduleDirectory: ['./', 'node_modules']
             }
         }
     }

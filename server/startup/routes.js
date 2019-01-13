@@ -1,13 +1,13 @@
 import express from 'express';
 
-import auth from '../routes/auth';
-import customers from '../routes/customers';
-import genres from '../routes/genres';
-import movies from '../routes/movies';
-import rentals from '../routes/rentals';
-import users from '../routes/users';
+import auth from 'server/routes/auth';
+import customers from 'server/routes/customers';
+import genres from 'server/routes/genres';
+import movies from 'server/routes/movies';
+import rentals from 'server/routes/rentals';
+import users from 'server/routes/users';
 
-import errorHandler from '../middlewares/error';
+import errorHandler from 'server/middlewares/error';
 
 /**
  * Build the routes for the application.

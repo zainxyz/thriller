@@ -2,8 +2,8 @@ import _pick from 'lodash/pick';
 import bcrypt from 'bcrypt';
 import express from 'express';
 
-import User, { validateUser } from '../models/user';
-import authMiddleware from '../middlewares/auth';
+import User, { validateUser } from 'server/models/user';
+import authMiddleware from 'server/middlewares/auth';
 
 // Create a Router
 const router = express.Router();
