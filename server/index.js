@@ -22,6 +22,8 @@ const PORT = process.env.PORT || 3000;
 // Build the routes for the app.
 buildRoutes(app);
 // Listen on the provided port.
-app.listen(PORT, () => {
-    winston.info(`Server started on port ${PORT}...`);
+const server = app.listen(PORT, () => {
+    winston.info(`'thriller' server started on port ${PORT}...`);
 });
+// Export the server for testing purposes.
+export default server;

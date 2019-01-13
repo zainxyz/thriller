@@ -1,3 +1,4 @@
+import config from 'config';
 import mongoose from 'mongoose';
 import winston from 'winston';
 
@@ -7,17 +8,19 @@ import winston from 'winston';
  * @method connectToDB
  */
 function connectToDB() {
+    // Extract the db connection stream.
+    const dbConnection = config.get('db');
     // Connect to the mongoDB server
     mongoose
         .connect(
-            'mongodb://localhost/thriller',
+            dbConnection,
             {
                 useCreateIndex : true,
                 useNewUrlParser: true
             }
         )
         .then(() => {
-            winston.info(`Connected to 'thriller' MongoDB...`);
+            winston.info(`Connected to 'thriller' @ ${dbConnection}...`);
         });
 }
 

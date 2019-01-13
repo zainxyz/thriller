@@ -1,5 +1,5 @@
 {
-    "author": "Zain A.",
+    "author": "Zain Abidi",
     "bugs": {
         "url": "https://github.com/zainxyz/thriller/issues"
     },
@@ -43,6 +43,7 @@
         "jest": "23.6.0",
         "nodemon": "1.18.9",
         "prettier": "1.14.2",
+        "supertest": "3.3.0",
         "winston": "3.1.0",
         "winston-mongodb": "4.0.3"
     },
