@@ -3,6 +3,9 @@ import express from 'express';
 import Genre, { validateGenre } from 'server/models/genre';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
+import throwError from 'server/middlewares/throwError';
+import sendResponse from 'server/middlewares/sendResponse';
+import validateObjectIdMiddleware from 'server/middlewares/validateObjectId';
 
 // Create a Router
 const router = express.Router();
@@ -13,26 +16,35 @@ router.get('/', async (req, res, next) => {
         // Fetch the list of genres
         const genresList = await Genre.find().sort('name');
         // Send the list of genres
-        res.send(genresList);
+        sendResponse(
+            {
+                totalRecords: genresList.length,
+                genres      : genresList
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
 });
 
 // Fetch an individual genre via the genre id.
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validateObjectIdMiddleware, async (req, res, next) => {
     try {
         // Find the genre in the database
         const genre = await Genre.findById(req.params.id);
         // If genre is not found, send back an error.
         // 404 - Not Found
         if (!genre) {
-            return res
-                .status(404)
-                .send(`The genre with given id of '${req.params.id}' was not found.`);
+            return throwError(`The genre with given id of '${req.params.id}' was not found.`, 404);
         }
         // Send back the found genre.
-        res.send(genre);
+        sendResponse(
+            {
+                genre
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -45,7 +57,7 @@ router.post('/', authMiddleware, async (req, res, next) => {
         const { error } = validateGenre(req.body);
         // If invalid, return 400 - Bad Request
         if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
+            return throwError(error.details.map(e => e.message).join(', '), 400);
         }
         // Build the genre.
         const genre = new Genre({
@@ -54,7 +66,12 @@ router.post('/', authMiddleware, async (req, res, next) => {
         // Save the newly created genre to the database.
         await genre.save();
         // Send back the newly created genre.
-        res.send(genre);
+        sendResponse(
+            {
+                genre
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -67,7 +84,7 @@ router.put('/:id', authMiddleware, async (req, res, next) => {
         const { error } = validateGenre(req.body);
         // If invalid, return 400 - Bad Request
         if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
+            return throwError(error.details.map(e => e.message).join(', '), 400);
         }
         // Find the genre in the database
         const genre = await Genre.findByIdAndUpdate(
@@ -78,12 +95,15 @@ router.put('/:id', authMiddleware, async (req, res, next) => {
         // If genre is not found, send back an error.
         // 404 - Not Found
         if (!genre) {
-            return res
-                .status(404)
-                .send(`The genre with given id of '${req.params.id}' was not found.`);
+            return throwError(`The genre with given id of '${req.params.id}' was not found.`, 404);
         }
         // Return the updated genre
-        res.send(genre);
+        sendResponse(
+            {
+                genre
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -97,12 +117,15 @@ router.delete('/:id', [authMiddleware, adminMiddleware], async (req, res, next) 
         // If genre is not found, send back an error.
         // 404 - Not Found
         if (!genre) {
-            return res
-                .status(404)
-                .send(`The genre with given id of '${req.params.id}' was not found.`);
+            return throwError(`The genre with given id of '${req.params.id}' was not found.`, 404);
         }
         // Return the deleted genre
-        res.send(genre);
+        sendResponse(
+            {
+                genre
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }

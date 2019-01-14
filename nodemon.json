@@ -1,5 +1,5 @@
 {
     "events": {
-        "start": "node ./middlewares/nodemon-date.js"
+        "start": "node ./server/middlewares/nodemon-date.js"
     }
 }

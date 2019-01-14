@@ -1,6 +1,8 @@
 import config from 'config';
 import jwt from 'jsonwebtoken';
 
+import throwError from './throwError';
+
 /**
  * Authentication for a user.
  *
@@ -16,17 +18,11 @@ function auth(req, res, next) {
         let token = req.header('authorization');
         // If no token present, return error.
         if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: 'Access denied. An oAuth token must be provided.'
-            });
+            return throwError('Access denied. An oAuth token must be provided.', 401);
         }
         // Verify that token starts with `Bearer` text.
         if (!token.startsWith('Bearer ')) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid oAuth token.'
-            });
+            return throwError('Invalid oAuth token.', 400);
         }
         // Remove the `Bearer` from the string.
         token = token.slice(7, token.length);
@@ -37,10 +33,7 @@ function auth(req, res, next) {
         // Pass on the middleware
         next();
     } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: 'Invalid oAuth token.'
-        });
+        return throwError(error.message || 'Invalid oAuth token.', error.status || 400);
     }
 }
 

@@ -1,5 +1,5 @@
 // NOTE: commenting out to run integration tests.
-// import 'winston-mongodb';
+import 'winston-mongodb';
 import path from 'path';
 import { configure, format, transports } from 'winston';
 
@@ -31,14 +31,14 @@ function logger() {
             }),
             new transports.File({
                 filename: path.join(__dirname, '..', 'logs/logfile.log')
-            })
+            }),
             // NOTE: commenting out to run integration tests.
-            // new transports.MongoDB({
-            //     db     : 'mongodb://localhost/thriller',
-            //     options: {
-            //         useNewUrlParser: true
-            //     }
-            // })
+            new transports.MongoDB({
+                db     : 'mongodb://localhost/thriller',
+                options: {
+                    useNewUrlParser: true
+                }
+            })
         ],
         exceptionHandlers: [
             new transports.Console({

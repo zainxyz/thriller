@@ -1,3 +1,5 @@
+import throwError from './throwError';
+
 /**
  * Is the current user an Admin?
  *
@@ -11,18 +13,15 @@ function admin(req, res, next) {
     try {
         // If the user is not an admin, return Error
         if (!req.user.isAdmin) {
-            return res.status(403).json({
-                success: false,
-                message: 'Access Denied.'
-            });
+            return throwError('Access Denied', 403);
         }
         // If they are an admin, carry on...
         next();
     } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: 'This request requires higher privileges.'
-        });
+        return throwError(
+            error.message || 'This request requires higher privileges.',
+            error.status || 400
+        );
     }
 }
 

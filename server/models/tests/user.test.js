@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import mongoose from 'mongoose';
 
-import User from '../user';
+import User from 'server/models/user';
 
 describe('User (model)', () => {
     describe('genAuthToken()', () => {

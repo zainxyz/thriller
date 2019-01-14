@@ -1,5 +1,5 @@
 const jestConfig = {
-    collectCoverage    : true,
+    collectCoverage    : false,
     collectCoverageFrom: ['<rootdir>/**/*.js'],
     coverageDirectory  : './coverage',
     coverageReporters  : ['json', 'html', 'text', 'text-summary'],
