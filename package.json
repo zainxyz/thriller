@@ -74,8 +74,9 @@
         "url": "git+https://github.com/zainxyz/thriller.git"
     },
     "scripts": {
+        "coverage": "npm run test -- --coverage",
         "start": "cross-env NODE_ENV=development babel-node --presets @babel/preset-env ./server/index.js",
-        "test": "cross-env NODE_ENV=test jest",
+        "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
         "watch:server": "cross-env NODE_ENV=development nodemon ./server/index.js --exec babel-node --presets @babel/preset-env",
         "watch:test": "npm run test -- --watchAll"
     },

@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
 import config from 'config';
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 import User from 'server/models/user';

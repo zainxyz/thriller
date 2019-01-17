@@ -1,8 +1,7 @@
 const jestConfig = {
-    collectCoverage    : false,
-    collectCoverageFrom: ['<rootdir>/**/*.js'],
+    collectCoverageFrom: ['<rootDir>/**/server/**/*.js', '!<rootDir>/**/*.test.js'],
     coverageDirectory  : './coverage',
-    coverageReporters  : ['json', 'html', 'text', 'text-summary'],
+    coverageReporters  : ['html', 'text', 'text-summary'],
     coverageThreshold  : {
         global: {
             branches  : 80,

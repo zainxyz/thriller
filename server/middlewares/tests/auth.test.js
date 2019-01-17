@@ -1,5 +1,5 @@
-import request from 'supertest';
 import mongoose from 'mongoose';
+import request from 'supertest';
 
 import Genre from 'server/models/genre';
 import User from 'server/models/user';
@@ -15,8 +15,8 @@ describe('auth (middleware)', () => {
         token = new User().genAuthToken();
     });
 
-    afterEach(async () => {
-        await Genre.remove({});
+    afterAll(() => {
+        mongoose.disconnect();
     });
 
     // Execute the request
@@ -43,18 +43,23 @@ describe('auth (middleware)', () => {
         expect(res.status).toBe(400);
     });
 
-    it('should return 200 if token is valid', async () => {
+    it('should return 200 if token is valid', async done => {
         const res = await executeRequest();
 
         expect(res.status).toBe(201);
+
+        await Genre.remove({});
+        done();
     });
 
-    it('should populate req.user with the payload of a valid JWT', () => {
+    it('should populate req.user with the payload of a valid JWT', async done => {
         const user = {
-            _id    : mongoose.Types.ObjectId().toHexString(),
+            _id    : new mongoose.Types.ObjectId().toHexString(),
             isAdmin: true
         };
+
         const authToken = new User(user).genAuthToken();
+
         const req = {
             header: jest.fn().mockReturnValue(`Bearer ${authToken}`)
         };
@@ -65,5 +70,8 @@ describe('auth (middleware)', () => {
 
         expect(req.user).toBeDefined();
         expect(req.user).toMatchObject(user);
+
+        await Genre.remove({});
+        done();
     });
 });
