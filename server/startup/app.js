@@ -1,10 +1,10 @@
 import express from 'express';
 
 import buildRoutes from './routes';
-import configureApp from './configureApp';
+import configureApp from './configure-app';
 import connectToDB from './db';
 import logger from './logger';
-import prodEnv from './prodEnv';
+import prodEnv from './prod-env';
 import validation from './validation';
 
 // Log the error messages.

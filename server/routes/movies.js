@@ -4,7 +4,7 @@ import Genre from 'server/models/genre';
 import Movie, { validateMovie } from 'server/models/movie';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
-import validateModel from 'server/middlewares/validateModel';
+import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
 const router = express.Router();

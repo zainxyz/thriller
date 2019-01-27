@@ -3,10 +3,10 @@ import express from 'express';
 import Genre, { validateGenre } from 'server/models/genre';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
-import sendResponse from 'server/middlewares/sendResponse';
-import throwError from 'server/middlewares/throwError';
-import validateModel from 'server/middlewares/validateModel';
-import validateObjectIdMiddleware from 'server/middlewares/validateObjectId';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
+import validateModel from 'server/middlewares/validate-model';
+import validateObjectIdMiddleware from 'server/middlewares/validate-object-id';
 
 // Create a Router
 const router = express.Router();

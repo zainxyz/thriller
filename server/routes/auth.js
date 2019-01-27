@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import express from 'express';
 
 import User from 'server/models/user';
-import validateModel from 'server/middlewares/validateModel';
+import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
 const router = express.Router();

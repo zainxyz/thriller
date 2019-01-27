@@ -1,7 +1,7 @@
 import config from 'config';
 import jwt from 'jsonwebtoken';
 
-import throwError from './throwError';
+import throwError from './throw-error';
 
 /**
  * Authentication for a user.

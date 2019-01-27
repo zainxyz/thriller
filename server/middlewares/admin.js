@@ -1,4 +1,4 @@
-import throwError from './throwError';
+import throwError from './throw-error';
 
 /**
  * Is the current user an Admin?

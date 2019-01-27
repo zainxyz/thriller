@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import throwError from './throwError';
+import throwError from './throw-error';
 
 /**
  * Are we passing in a valid `_id` field?

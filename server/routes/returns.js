@@ -4,9 +4,9 @@ import _differenceInDays from 'date-fns/difference_in_days';
 import Movie from 'server/models/movie';
 import Rental, { validateRental } from 'server/models/rental';
 import authMiddleware from 'server/middlewares/auth';
-import sendResponse from 'server/middlewares/sendResponse';
-import throwError from 'server/middlewares/throwError';
-import validateModel from 'server/middlewares/validateModel';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
+import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
 const router = express.Router();

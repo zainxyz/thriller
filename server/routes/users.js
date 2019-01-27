@@ -4,7 +4,7 @@ import express from 'express';
 
 import User, { validateUser } from 'server/models/user';
 import authMiddleware from 'server/middlewares/auth';
-import validateModel from 'server/middlewares/validateModel';
+import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
 const router = express.Router();

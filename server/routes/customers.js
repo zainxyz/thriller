@@ -3,7 +3,7 @@ import express from 'express';
 import Customer, { validateCustomer } from 'server/models/customer';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
-import validateModel from 'server/middlewares/validateModel';
+import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
 const router = express.Router();

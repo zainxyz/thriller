@@ -87,7 +87,7 @@
         "lint": "eslint ./server",
         "start": "cross-env NODE_ENV=production babel-node --presets @babel/preset-env ./server/index.js",
         "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
-        "watch:server": "cross-env NODE_ENV=development nodemon ./server/index.js --exec babel-node --presets @babel/preset-env",
+        "watch:dev": "cross-env NODE_ENV=development nodemon ./server/index.js --exec babel-node --presets @babel/preset-env",
         "watch:test": "npm run test -- --watchAll"
     },
     "version": "1.0.0"

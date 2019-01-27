@@ -6,7 +6,7 @@ import Customer from 'server/models/customer';
 import Movie from 'server/models/movie';
 import Rental, { validateRental } from 'server/models/rental';
 import authMiddleware from 'server/middlewares/auth';
-import validateModel from 'server/middlewares/validateModel';
+import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
 const router = express.Router();
