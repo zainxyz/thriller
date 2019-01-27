@@ -4,6 +4,7 @@ import Genre from 'server/models/genre';
 import Movie, { validateMovie } from 'server/models/movie';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
+import validateModel from 'server/middlewares/validateModel';
 
 // Create a Router
 const router = express.Router();
@@ -40,14 +41,8 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Create a new movie.
-router.post('/', authMiddleware, async (req, res, next) => {
+router.post('/', [authMiddleware, validateModel(validateMovie)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateMovie(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
-        }
         // Find the requested genre
         const genre = await Genre.findById(req.body.genreId);
         // If not found, send back an error.
@@ -74,14 +69,8 @@ router.post('/', authMiddleware, async (req, res, next) => {
 });
 
 // Update a given movie via the movie ID.
-router.put('/:id', authMiddleware, async (req, res, next) => {
+router.put('/:id', [authMiddleware, validateModel(validateMovie)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateMovie(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
-        }
         // Find the requested genre
         const genre = await Genre.findById(req.body.genreId);
         // If not found, send back an error.

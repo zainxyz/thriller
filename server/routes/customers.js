@@ -3,6 +3,7 @@ import express from 'express';
 import Customer, { validateCustomer } from 'server/models/customer';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
+import validateModel from 'server/middlewares/validateModel';
 
 // Create a Router
 const router = express.Router();
@@ -39,14 +40,8 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Create a new customer.
-router.post('/', authMiddleware, async (req, res, next) => {
+router.post('/', [authMiddleware, validateModel(validateCustomer)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateCustomer(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
-        }
         // Build the customer.
         const customer = new Customer({
             isGold: req.body.isGold,
@@ -63,14 +58,8 @@ router.post('/', authMiddleware, async (req, res, next) => {
 });
 
 // Update a given customer via the customer ID.
-router.put('/:id', authMiddleware, async (req, res, next) => {
+router.put('/:id', [authMiddleware, validateModel(validateCustomer)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateCustomer(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
-        }
         // Find the customer in the database
         const customer = await Customer.findByIdAndUpdate(
             req.params.id,

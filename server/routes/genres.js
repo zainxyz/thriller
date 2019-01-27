@@ -3,8 +3,9 @@ import express from 'express';
 import Genre, { validateGenre } from 'server/models/genre';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
-import throwError from 'server/middlewares/throwError';
 import sendResponse from 'server/middlewares/sendResponse';
+import throwError from 'server/middlewares/throwError';
+import validateModel from 'server/middlewares/validateModel';
 import validateObjectIdMiddleware from 'server/middlewares/validateObjectId';
 
 // Create a Router
@@ -51,14 +52,8 @@ router.get('/:id', validateObjectIdMiddleware, async (req, res, next) => {
 });
 
 // Create a new genre.
-router.post('/', authMiddleware, async (req, res, next) => {
+router.post('/', [authMiddleware, validateModel(validateGenre)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateGenre(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return throwError(error.details.map(e => e.message).join(', '), 400);
-        }
         // Build the genre.
         const genre = new Genre({
             name: req.body.name
@@ -78,14 +73,8 @@ router.post('/', authMiddleware, async (req, res, next) => {
 });
 
 // Update a given genre via the genre ID.
-router.put('/:id', authMiddleware, async (req, res, next) => {
+router.put('/:id', [authMiddleware, validateModel(validateGenre)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateGenre(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return throwError(error.details.map(e => e.message).join(', '), 400);
-        }
         // Find the genre in the database
         const genre = await Genre.findByIdAndUpdate(
             req.params.id,

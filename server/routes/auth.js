@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import express from 'express';
 
 import User from 'server/models/user';
+import validateModel from 'server/middlewares/validateModel';
 
 // Create a Router
 const router = express.Router();
@@ -38,14 +39,8 @@ function validateAuth(request) {
 }
 
 // Create a new user.
-router.post('/', async (req, res, next) => {
+router.post('/', validateModel(validateAuth), async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateAuth(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
-        }
         // Validate that the user has not already been registered.
         const user = await User.findOne({ email: req.body.email });
         // If user exists, return 400 - Bad Request

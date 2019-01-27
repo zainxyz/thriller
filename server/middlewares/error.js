@@ -16,7 +16,8 @@ function error(err, req, res, next) {
     winston.error(err.message, err);
     // Send back a 500 response.
     res.status(err.status || 500).json({
-        error: {
+        success: false,
+        error  : {
             message: err.message || 'Something failed. Please try again.',
             stack  : err.stack
         }

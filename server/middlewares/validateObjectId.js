@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import throwError from './throwError';
+
 /**
  * Are we passing in a valid `_id` field?
  *
@@ -13,18 +15,15 @@ function validateObjectId(req, res, next) {
     try {
         // If an invalid ObjectId was passed, return an error.
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(404).json({
-                success: false,
-                message: `Invalid id of '${req.params.id}' was passed.`
-            });
+            return throwError(`Invalid id of '${req.params.id}' was passed.`, 404);
         }
         // If a valid ObjectId was passed, carry on...
         next();
     } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: 'This request requires higher privileges.'
-        });
+        return throwError(
+            error.message || 'This request requires higher privileges.',
+            error.status || 400
+        );
     }
 }
 

@@ -1,7 +1,7 @@
 import express from 'express';
 
 import buildRoutes from 'server/startup/routes';
-import configureApp from 'server/startup/config';
+import configureApp from 'server/startup/configureApp';
 import connectToDB from 'server/startup/db';
 import logger from 'server/startup/logger';
 import validation from 'server/startup/validation';

@@ -10,7 +10,8 @@ function sendResponse(response, resStream) {
     const statusCode = resStream.req.method === 'POST' ? 201 : 200;
     // Send the response back to the client.
     resStream.status(statusCode).json({
-        ...response
+        ...response,
+        success: true
     });
 }
 

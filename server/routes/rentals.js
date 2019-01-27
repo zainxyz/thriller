@@ -6,6 +6,7 @@ import Customer from 'server/models/customer';
 import Movie from 'server/models/movie';
 import Rental, { validateRental } from 'server/models/rental';
 import authMiddleware from 'server/middlewares/auth';
+import validateModel from 'server/middlewares/validateModel';
 
 // Create a Router
 const router = express.Router();
@@ -25,14 +26,8 @@ router.get('/', async (req, res, next) => {
 });
 
 // Create a new rental.
-router.post('/', authMiddleware, async (req, res, next) => {
+router.post('/', [authMiddleware, validateModel(validateRental)], async (req, res, next) => {
     try {
-        // Validate
-        const { error } = validateRental(req.body);
-        // If invalid, return 400 - Bad Request
-        if (error) {
-            return res.status(400).send(error.details.map(e => e.message).join(', '));
-        }
         // Find the requested customer
         const customer = await Customer.findById(req.body.customerId);
         // If not found, send back an error.

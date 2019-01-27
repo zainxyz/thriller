@@ -1,11 +1,12 @@
 import express from 'express';
 import _differenceInDays from 'date-fns/difference_in_days';
 
-import Rental from 'server/models/rental';
 import Movie from 'server/models/movie';
+import Rental, { validateRental } from 'server/models/rental';
 import authMiddleware from 'server/middlewares/auth';
 import sendResponse from 'server/middlewares/sendResponse';
 import throwError from 'server/middlewares/throwError';
+import validateModel from 'server/middlewares/validateModel';
 
 // Create a Router
 const router = express.Router();
@@ -27,15 +28,8 @@ const router = express.Router();
 // Return the rental
 
 // Fetch the list of available rentals.
-router.post('/', authMiddleware, async (req, res, next) => {
+router.post('/', [authMiddleware, validateModel(validateRental)], async (req, res, next) => {
     try {
-        if (!req.body.customerId) {
-            return throwError('customerId not present', 400);
-        }
-        if (!req.body.movieId) {
-            return throwError('movieId not present', 400);
-        }
-
         const rental = await Rental.findOne({
             'customer._id': req.body.customerId,
             'movie._id'   : req.body.movieId
