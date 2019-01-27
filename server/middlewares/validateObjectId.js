@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 /**
- * Is the current user an Admin?
+ * Are we passing in a valid `_id` field?
  *
  * @method validateObjectId
  * @param  {Object}         req The API request
