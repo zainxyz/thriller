@@ -1,10 +1,11 @@
 import express from 'express';
 
-import buildRoutes from 'server/startup/routes';
-import configureApp from 'server/startup/configureApp';
-import connectToDB from 'server/startup/db';
-import logger from 'server/startup/logger';
-import validation from 'server/startup/validation';
+import buildRoutes from './routes';
+import configureApp from './configureApp';
+import connectToDB from './db';
+import logger from './logger';
+import prodEnv from './prodEnv';
+import validation from './validation';
 
 // Log the error messages.
 logger();
@@ -16,6 +17,10 @@ validation();
 connectToDB();
 // Create an express server
 const app = express();
+// Load in the production middlewares if we're in the prod environment.
+if (process.env.NODE_ENV === 'production') {
+    prodEnv(app);
+}
 // Build the routes for the app.
 buildRoutes(app);
 // Export the app.
