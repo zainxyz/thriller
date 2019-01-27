@@ -30,25 +30,20 @@ const router = express.Router();
 // Fetch the list of available rentals.
 router.post('/', [authMiddleware, validateModel(validateRental)], async (req, res, next) => {
     try {
-        const rental = await Rental.findOne({
-            'customer._id': req.body.customerId,
-            'movie._id'   : req.body.movieId
-        });
-
+        // Fetch the rental from the db.
+        const rental = await Rental.lookup(req.body.customerId, req.body.movieId);
+        // Catch errors for invalid rentals.
         if (!rental) {
             return throwError('rental not found', 404);
         }
-
+        // Catch errors if a user is trying to return an already returned rental.
         if (rental.dateReturned) {
             return throwError('Your return has already been processed', 400);
         }
-
-        rental.dateReturned = new Date();
-        const rentalDate = _differenceInDays(new Date(), rental.dateOut);
-        rental.rentalFee = rentalDate * rental.movie.dailyRentalRate;
-
+        // Calculate the rental fee.
+        rental.calculateRentalFee();
         await rental.save();
-
+        // Update the movie by incrementing the `numberInStock`.
         await Movie.update(
             { _id: rental.movie._id },
             {
@@ -57,7 +52,7 @@ router.post('/', [authMiddleware, validateModel(validateRental)], async (req, re
                 }
             }
         );
-
+        // Send back the updated rental.
         sendResponse(
             {
                 rental

@@ -36,6 +36,10 @@ const schema = new mongoose.Schema({
 
 /**
  * Generate an oAuth Token for the current user.
+ * NOTE: This is an instance method. It depends on the User object.
+ *
+ * @example
+ * new User().genAuthToken()
  *
  * @method genAuthToken
  * @return {string}      The generated oAuth JWT

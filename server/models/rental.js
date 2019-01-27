@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import _differenceInDays from 'date-fns/difference_in_days';
 import mongoose from 'mongoose';
 
 /**
@@ -75,6 +76,44 @@ const schema = new mongoose.Schema({
         min : 0
     }
 });
+
+/**
+ * Fetch a specific Rental via the given customer and movie ID.
+ * NOTE: This is a static method. It is available directly on the Rental object.
+ *
+ * @example
+ * Rental.lookup(...params)
+ *
+ * @method
+ * @param  {[type]} customerId [description]
+ * @param  {[type]} movieId    [description]
+ * @return {[type]}            [description]
+ */
+schema.statics.lookup = function(customerId, movieId) {
+    return this.findOne({
+        'customer._id': customerId,
+        'movie._id'   : movieId
+    });
+};
+
+/**
+ * Calculate the rental fee for a particular rental.
+ * NOTE: This is an instance method. It depends on the Rental object.
+ *
+ * @example
+ * const rental = new Rental({});
+ * rental.calculateRentalFee();
+ *
+ * @method
+ */
+schema.methods.calculateRentalFee = function() {
+    // Calculate the returned date.
+    this.dateReturned = new Date();
+    // Calculate the number of days the movie was rented for.
+    const rentalDays = _differenceInDays(new Date(), this.dateOut);
+    // Calculate the rental fee.
+    this.rentalFee = rentalDays * this.movie.dailyRentalRate;
+};
 
 /**
  * Build the Rental model.
