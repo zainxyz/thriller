@@ -30,7 +30,7 @@ function logger() {
                 format: myConsoleFormat
             }),
             new transports.File({
-                filename: path.join(__dirname, '..', 'logs/logfile.log')
+                filename: 'errors.log'
             }),
             // NOTE: commenting out to run integration tests.
             new transports.MongoDB({
@@ -45,7 +45,7 @@ function logger() {
                 format: myConsoleFormat
             }),
             new transports.File({
-                filename: path.join(__dirname, '..', 'logs/uncaughtExceptions.log')
+                filename: 'uncaughtExceptions.log'
             })
         ],
         exitOnError: false
