@@ -59,10 +59,12 @@
         "winston-mongodb": "4.0.3"
     },
     "devEngines": {
-        "node": ">=8.0.0"
+        "node": ">=8.0.0",
+        "npm": ">=6.0.0"
     },
     "engines": {
-        "node": ">=10.0.0"
+        "node": ">=10.0.0",
+        "npm": ">=6.0.0"
     },
     "homepage": "https://github.com/zainxyz/thriller#readme",
     "keywords": [
