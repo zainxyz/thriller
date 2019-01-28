@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import express from 'express';
 
 import User from 'server/models/user';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
 import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
@@ -38,27 +40,30 @@ function validateAuth(request) {
     return Joi.validate(request, schema);
 }
 
-// Create a new user.
+// Login and authenticate a user.
 router.post('/', validateModel(validateAuth), async (req, res, next) => {
     try {
         // Validate that the user has not already been registered.
         const user = await User.findOne({ email: req.body.email });
         // If user exists, return 400 - Bad Request
         if (!user) {
-            return res.status(400).send(`Invalid email or password.`);
+            return throwError(`Invalid email or password.`, 400);
         }
         // Compare the hashsed password with the plaintext password.
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         // If invalid, return 400 - Bad Request
         if (!validPassword) {
-            return res.status(400).send(`Invalid email or password`);
+            return throwError(`Invalid email or password`, 400);
         }
         // Generate a JWT token.
         const token = user.genAuthToken();
         // Valid login.
-        res.send({
-            accessToken: token
-        });
+        return sendResponse(
+            {
+                accessToken: token
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }

@@ -3,6 +3,8 @@ import express from 'express';
 import Customer, { validateCustomer } from 'server/models/customer';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
 import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
@@ -14,7 +16,13 @@ router.get('/', async (req, res, next) => {
         // Fetch the list of customers
         const customersList = await Customer.find().sort('name');
         // Send the list of customers
-        res.send(customersList);
+        return sendResponse(
+            {
+                customers   : customersList,
+                totalRecords: customersList.length
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -28,12 +36,18 @@ router.get('/:id', async (req, res, next) => {
         // If customer is not found, send back an error.
         // 404 - Not Found
         if (!customer) {
-            return res
-                .status(404)
-                .send(`The customer with given id of '${req.params.id}' was not found.`);
+            return throwError(
+                `The customer with given id of '${req.params.id}' was not found.`,
+                404
+            );
         }
         // Send back the found customer.
-        res.send(customer);
+        return sendResponse(
+            {
+                customer
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -51,7 +65,13 @@ router.post('/', [authMiddleware, validateModel(validateCustomer)], async (req, 
         // Save the newly created customer to the database.
         await customer.save();
         // Send back the newly created customer.
-        res.send(customer);
+        return sendResponse(
+            {
+                customer
+            },
+            res,
+            201
+        );
     } catch (e) {
         next(e);
     }
@@ -73,12 +93,18 @@ router.put('/:id', [authMiddleware, validateModel(validateCustomer)], async (req
         // If customer is not found, send back an error.
         // 404 - Not Found
         if (!customer) {
-            return res
-                .status(404)
-                .send(`The customer with given id of '${req.params.id}' was not found.`);
+            return throwError(
+                `The customer with given id of '${req.params.id}' was not found.`,
+                404
+            );
         }
         // Return the updated customer
-        res.send(customer);
+        return sendResponse(
+            {
+                customer
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -92,12 +118,18 @@ router.delete('/:id', [authMiddleware, adminMiddleware], async (req, res, next) 
         // If customer is not found, send back an error.
         // 404 - Not Found
         if (!customer) {
-            return res
-                .status(404)
-                .send(`The customer with given id of '${req.params.id}' was not found.`);
+            return throwError(
+                `The customer with given id of '${req.params.id}' was not found.`,
+                404
+            );
         }
         // Return the deleted customer
-        res.send(customer);
+        return sendResponse(
+            {
+                customer
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }

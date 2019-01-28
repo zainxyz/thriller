@@ -26,7 +26,7 @@ const router = express.Router();
 // Increase the stock of the movie
 // Return the rental
 
-// Fetch the list of available rentals.
+// Return a movie.
 router.post('/', [authMiddleware, validateModel(validateRental)], async (req, res, next) => {
     try {
         // Fetch the rental from the db.
@@ -52,7 +52,7 @@ router.post('/', [authMiddleware, validateModel(validateRental)], async (req, re
             }
         );
         // Send back the updated rental.
-        sendResponse(
+        return sendResponse(
             {
                 rental
             },

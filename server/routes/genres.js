@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
         // Fetch the list of genres
         const genresList = await Genre.find().sort('name');
         // Send the list of genres
-        sendResponse(
+        return sendResponse(
             {
                 totalRecords: genresList.length,
                 genres      : genresList
@@ -40,7 +40,7 @@ router.get('/:id', validateObjectIdMiddleware, async (req, res, next) => {
             return throwError(`The genre with given id of '${req.params.id}' was not found.`, 404);
         }
         // Send back the found genre.
-        sendResponse(
+        return sendResponse(
             {
                 genre
             },
@@ -61,11 +61,12 @@ router.post('/', [authMiddleware, validateModel(validateGenre)], async (req, res
         // Save the newly created genre to the database.
         await genre.save();
         // Send back the newly created genre.
-        sendResponse(
+        return sendResponse(
             {
                 genre
             },
-            res
+            res,
+            201
         );
     } catch (e) {
         next(e);
@@ -87,7 +88,7 @@ router.put('/:id', [authMiddleware, validateModel(validateGenre)], async (req, r
             return throwError(`The genre with given id of '${req.params.id}' was not found.`, 404);
         }
         // Return the updated genre
-        sendResponse(
+        return sendResponse(
             {
                 genre
             },
@@ -109,7 +110,7 @@ router.delete('/:id', [authMiddleware, adminMiddleware], async (req, res, next) 
             return throwError(`The genre with given id of '${req.params.id}' was not found.`, 404);
         }
         // Return the deleted genre
-        sendResponse(
+        return sendResponse(
             {
                 genre
             },

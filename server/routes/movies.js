@@ -4,6 +4,8 @@ import Genre from 'server/models/genre';
 import Movie, { validateMovie } from 'server/models/movie';
 import adminMiddleware from 'server/middlewares/admin';
 import authMiddleware from 'server/middlewares/auth';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
 import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
@@ -15,7 +17,13 @@ router.get('/', async (req, res, next) => {
         // Fetch the list of movies
         const moviesList = await Movie.find().sort('name');
         // Send the list of movies
-        res.send(moviesList);
+        return sendResponse(
+            {
+                movies      : moviesList,
+                totalRecords: moviesList.length
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -29,12 +37,15 @@ router.get('/:id', async (req, res, next) => {
         // If movie is not found, send back an error.
         // 404 - Not Found
         if (!movie) {
-            return res
-                .status(404)
-                .send(`The movie with given id of '${req.params.id}' was not found.`);
+            return throwError(`The movie with given id of '${req.params.id}' was not found.`, 404);
         }
         // Send back the found movie.
-        res.send(movie);
+        return sendResponse(
+            {
+                movie
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -47,7 +58,7 @@ router.post('/', [authMiddleware, validateModel(validateMovie)], async (req, res
         const genre = await Genre.findById(req.body.genreId);
         // If not found, send back an error.
         if (!genre) {
-            return res.status(404).send(`Genre with id '${req.body.genreId}' was not found.`);
+            return throwError(`Genre with id '${req.body.genreId}' was not found.`, 404);
         }
         // Build the movie.
         const movie = new Movie({
@@ -62,7 +73,13 @@ router.post('/', [authMiddleware, validateModel(validateMovie)], async (req, res
         // Save the newly created movie to the database.
         await movie.save();
         // Send back the newly created movie.
-        res.send(movie);
+        return sendResponse(
+            {
+                movie
+            },
+            res,
+            201
+        );
     } catch (e) {
         next(e);
     }
@@ -75,7 +92,7 @@ router.put('/:id', [authMiddleware, validateModel(validateMovie)], async (req, r
         const genre = await Genre.findById(req.body.genreId);
         // If not found, send back an error.
         if (!genre) {
-            return res.status(404).send(`Genre with id '${req.body.genreId}' was not found.`);
+            return throwError(`Genre with id '${req.body.genreId}' was not found.`, 404);
         }
         // Find the movie in the database
         const movie = await Movie.findByIdAndUpdate(
@@ -94,12 +111,15 @@ router.put('/:id', [authMiddleware, validateModel(validateMovie)], async (req, r
         // If movie is not found, send back an error.
         // 404 - Not Found
         if (!movie) {
-            return res
-                .status(404)
-                .send(`The movie with given id of '${req.params.id}' was not found.`);
+            return throwError(`The movie with given id of '${req.params.id}' was not found.`, 404);
         }
         // Return the updated movie
-        res.send(movie);
+        return sendResponse(
+            {
+                movie
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -113,12 +133,15 @@ router.delete('/:id', [authMiddleware, adminMiddleware], async (req, res, next) 
         // If movie is not found, send back an error.
         // 404 - Not Found
         if (!movie) {
-            return res
-                .status(404)
-                .send(`The movie with given id of '${req.params.id}' was not found.`);
+            return throwError(`The movie with given id of '${req.params.id}' was not found.`, 404);
         }
         // Return the deleted movie
-        res.send(movie);
+        return sendResponse(
+            {
+                movie
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }

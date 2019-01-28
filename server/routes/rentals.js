@@ -6,6 +6,8 @@ import Customer from 'server/models/customer';
 import Movie from 'server/models/movie';
 import Rental, { validateRental } from 'server/models/rental';
 import authMiddleware from 'server/middlewares/auth';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
 import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
@@ -19,7 +21,13 @@ router.get('/', async (req, res, next) => {
         // Fetch the list of rentals
         const rentalsList = await Rental.find().sort('-dateOut');
         // Send the list of rentals
-        res.send(rentalsList);
+        return sendResponse(
+            {
+                rentals     : rentalsList,
+                totalRecords: rentalsList.length
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -32,17 +40,17 @@ router.post('/', [authMiddleware, validateModel(validateRental)], async (req, re
         const customer = await Customer.findById(req.body.customerId);
         // If not found, send back an error.
         if (!customer) {
-            return res.status(404).send(`Customer with id '${req.body.customerId}' was not found.`);
+            return throwError(`Customer with id '${req.body.customerId}' was not found.`, 404);
         }
         // Find the requested movie
         const movie = await Movie.findById(req.body.movieId);
         // If not found, send back an error.
         if (!movie) {
-            return res.status(404).send(`Movie with id '${req.body.movieId}' was not found.`);
+            return throwError(`Movie with id '${req.body.movieId}' was not found.`, 404);
         }
         // Check to see if the requested movie is available in stock.
         if (movie.numberInStock === 0) {
-            return res.status(400).send(`The requested movie '${movie.title}' is out of stock.`);
+            return throwError(`The requested movie '${movie.title}' is out of stock.`, 400);
         }
         // Build the rental.
         const rental = new Rental({
@@ -74,7 +82,13 @@ router.post('/', [authMiddleware, validateModel(validateRental)], async (req, re
             // Run Fawn
             .run();
         // Send back the newly created rental.
-        res.send(rental);
+        return sendResponse(
+            {
+                rental
+            },
+            res,
+            201
+        );
     } catch (e) {
         next(e);
     }

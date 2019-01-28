@@ -125,7 +125,7 @@ describe('/api/returns (route)', () => {
         it('should return 201 if we have a valid request', async () => {
             const res = await executeRequest();
 
-            expect(res.status).toBe(201);
+            expect(res.status).toBe(200);
         });
 
         it('should set the return date if input is valid', async () => {

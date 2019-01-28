@@ -4,6 +4,8 @@ import express from 'express';
 
 import User, { validateUser } from 'server/models/user';
 import authMiddleware from 'server/middlewares/auth';
+import sendResponse from 'server/middlewares/send-response';
+import throwError from 'server/middlewares/throw-error';
 import validateModel from 'server/middlewares/validate-model';
 
 // Create a Router
@@ -15,7 +17,12 @@ router.get('/current', authMiddleware, async (req, res, next) => {
         // Fetch the current user.
         const user = await User.findById(req.user._id).select('_id email name');
         // Send the user.
-        res.json(user);
+        return sendResponse(
+            {
+                user
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
@@ -28,9 +35,7 @@ router.post('/', validateModel(validateUser), async (req, res, next) => {
         const registeredUser = await User.findOne({ email: req.body.email });
         // If user exists, return 400 - Bad Request
         if (registeredUser) {
-            return res
-                .status(400)
-                .send(`A user has already been registered with these credentials.`);
+            return throwError('A user has already been registered with these credentials.', 400);
         }
         // Build the user.
         const user = new User(_pick(req.body, ['name', 'email', 'password']));
@@ -43,7 +48,13 @@ router.post('/', validateModel(validateUser), async (req, res, next) => {
         // Generate a JWT token.
         const token = user.genAuthToken();
         // Send back the newly created user.
-        res.header('Authorization', `Bearer ${token}`).send(_pick(user, ['_id', 'name', 'email']));
+        return sendResponse(
+            {
+                token,
+                user: _pick(user, ['_id', 'name', 'email'])
+            },
+            res
+        );
     } catch (e) {
         next(e);
     }
