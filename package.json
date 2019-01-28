@@ -40,7 +40,6 @@
         "babel-plugin-dynamic-import-node": "2.2.0",
         "babel-plugin-module-resolver": "3.1.1",
         "chalk": "2.4.2",
-        "cross-env": "5.1.6",
         "eslint": "5.6.0",
         "eslint-config-airbnb": "17.1.0",
         "eslint-config-react-app": "3.0.6",
@@ -83,11 +82,11 @@
     },
     "scripts": {
         "coverage": "npm run test -- --coverage",
-        "dev": "cross-env NODE_ENV=development babel-node --presets @babel/preset-env ./server/index.js",
+        "dev": "NODE_ENV=development babel-node --presets @babel/preset-env ./server/index.js",
         "lint": "eslint ./server",
-        "start": "cross-env NODE_ENV=production babel-node --presets @babel/preset-env ./server/index.js",
-        "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
-        "watch:dev": "cross-env NODE_ENV=development nodemon ./server/index.js --exec babel-node --presets @babel/preset-env",
+        "start": "NODE_ENV=production babel-node --presets @babel/preset-env ./server/index.js",
+        "test": "NODE_ENV=test jest --detectOpenHandles",
+        "watch:dev": "NODE_ENV=development nodemon ./server/index.js --exec babel-node --presets @babel/preset-env",
         "watch:test": "npm run test -- --watchAll"
     },
     "version": "1.0.0"
