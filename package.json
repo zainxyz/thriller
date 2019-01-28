@@ -84,7 +84,7 @@
         "coverage": "npm run test -- --coverage",
         "dev": "NODE_ENV=development babel-node --presets @babel/preset-env ./server/index.js",
         "lint": "eslint ./server",
-        "start": "NODE_ENV=production babel-node --presets @babel/preset-env ./server/index.js",
+        "start": "babel-node --presets @babel/preset-env ./server/index.js",
         "test": "NODE_ENV=test jest --detectOpenHandles",
         "watch:dev": "NODE_ENV=development nodemon ./server/index.js --exec babel-node --presets @babel/preset-env",
         "watch:test": "npm run test -- --watchAll"
