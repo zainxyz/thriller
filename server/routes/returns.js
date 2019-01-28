@@ -1,5 +1,4 @@
 import express from 'express';
-import _differenceInDays from 'date-fns/difference_in_days';
 
 import Movie from 'server/models/movie';
 import Rental, { validateRental } from 'server/models/rental';

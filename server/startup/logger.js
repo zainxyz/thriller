@@ -1,6 +1,4 @@
-// NOTE: commenting out to run integration tests.
 import 'winston-mongodb';
-import path from 'path';
 import { configure, format, transports } from 'winston';
 
 const { combine, label, prettyPrint, printf, splat, timestamp } = format;
